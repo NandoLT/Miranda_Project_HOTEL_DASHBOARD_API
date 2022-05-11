@@ -176,4 +176,4 @@ addUsers()
 
 setTimeout(() => {
     closeConnection();
-}, 1500)
+}, 2000)
