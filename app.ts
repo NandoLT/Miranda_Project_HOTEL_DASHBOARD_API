@@ -19,16 +19,16 @@ app.use(express.urlencoded({ extended: false }));
 app.set('port', process.env.PORT || 3000)
 app.use(cookieParser());
 
-app.use('/', (req, res, next) => {
-  res.json({ 
-    API: 'Mirandas Dashboard API',
-    ROUTES: {
-      users: '/api/users',
-      rooms: '/api/rooms',
-      bookings: '/api/bookings'
-    }
-  })
-});
+// app.use('/', (req, res, next) => {
+//   res.json({ 
+//     API: 'Mirandas Dashboard API',
+//     ROUTES: {
+//       users: '/api/users',
+//       rooms: '/api/rooms',
+//       bookings: '/api/bookings'
+//     }
+//   })
+// });
 app.use('/api/users', usersRouter);
 app.use('/api/rooms', roomsRouter);
 app.use('/api/bookings', bookingsRouter);
