@@ -1,12 +1,12 @@
 import {Express, ErrorRequestHandler} from 'express';
 var createError = require('http-errors');
 var express = require('express');
-// var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/users.route');
+var roomsRouter = require('./routes/rooms.route');
+var bookingsRouter = require('./routes/bookings.route');
 
 const app:Express = express(); 
 
@@ -17,8 +17,19 @@ app.use(express.urlencoded({ extended: false }));
 app.set('port', process.env.PORT || 3000)
 app.use(cookieParser());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', (req, res, next) => {
+  res.json({ 
+    API: 'Mirandas Dashboard API',
+    ROUTES: {
+      users: '/api/users',
+      rooms: '/api/rooms',
+      bookings: '/api/bookings'
+    }
+  })
+});
+app.use('/api/users', usersRouter);
+app.use('/api/rooms', roomsRouter);
+app.use('/api/bookings', bookingsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
