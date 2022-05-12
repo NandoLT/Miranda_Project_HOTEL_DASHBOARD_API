@@ -1,26 +1,32 @@
-const { Sign } = require('../libs/jwtAuth')
 const bcrypt = require('bcrypt');
-const dbConnection = require('../libs/DBConnections/mySQL_MDashboard');
+const { Sign } = require('../libs/jwtAuth');
+const comparePassword = require('../libs/comparePassword');
+const dbQuery = require('../libs/dbQuery');
 
 class UserController  {
 
     registerUser =  async (req, res, next) => {
         try {
+            console.log('REGISTER');
             let {photo, name_surname, email, start_date, description, contact, status, password} = req.body;
             password = await bcrypt.hash(password, 7);
 
-            await dbConnection.query(
+            const response = await dbQuery(
                 `INSERT INTO
-                    users (photo, name_surname, email, start_date, description, contact, status, password)
-                    VALUES ("${photo}", "${name_surname}", "${email}", "${start_date}", "${description}", "${contact}", "${status}", "${password}")`, 
-                (error, result, fields ) => {
-                    if(error) throw error;
-
-                    res.json({
-                        result: result
-                    });
-                }
+                users (photo, name_surname, email, start_date, description, contact, status, password)
+                VALUES ("${photo}", "${name_surname}", "${email}", "${start_date}", "${description}", "${contact}", "${status}", "${password}")`
             );
+
+            if(response.affectedRows != 1) {
+                const error = new Error('Query Insert Error');
+                res.status(401).json({ message: error.message });
+                return;
+            } 
+
+            res.status(201).json({
+                result: `Rows created ${response.affectedRows}, with id ${response.insertId}`
+            });
+            
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -28,21 +34,22 @@ class UserController  {
 
     loginUser =  async (req, res, next) => {
         const { email, password } = req.body;
-
         try {
-            if(email==='veronica@miranda.com' && password === 'contraseña') {
-                console.log('NO ERROR')
-                Sign(35, '2h', (err, jwtToken) => {
+
+            const user = await dbQuery(`SELECT email, password, employeeid FROM users WHERE email = "${email}"`);
+            console.log(user)
+            if(user?.length != 0 && (await comparePassword(password, user[0].password))) {
+
+                Sign(user[0].employeeid, '2h', (err, jwtToken) => {
                     if (err) {
                         res.status(500).json({ message: err.message });
                     }
-                    res.json({
+                    res.status(200).json({
                         msg: 'Token Created',
                         token: jwtToken,       
                     })
                 });
             } else {
-                console.log('ERROR')
                 const error = new Error('Invalid Credentials');
                 res.status(401).json({ message: error.message });
                 return;
@@ -54,18 +61,36 @@ class UserController  {
     }
 
     updateUser =  async (req, res, next) => {
+        let columnsValues = ''
+        
+        for (const item in req.body) {
+            if(item != 'userid') {
+                columnsValues += `${item}="${req.body[item]}",`;
+            } 
+        };
+        let {userid} = req.body;
+        
         try {
-            console.log('UPDATE USER')
+            const query = `UPDATE users SET ${columnsValues} employeeid=${userid} WHERE employeeid=${userid}`;
+            const result = await dbQuery(query);
+            res.status(200).json({
+                result: result.message
+            });
         } catch (error) {
-            console.log('ERROR:', error)
+            res.status(500).json({ message: error.message });
         }
     }
-
+    
     deleteUser =  async (req, res, next) => {
+        const {userid} = req.body
         try {
-            console.log('DELETE USER')
+            const result = await dbQuery(`DELETE FROM users WHERE employeeid = ${userid}`);
+            
+            res.status(200).json({ 
+                result: 'affectedRows ' + result.affectedRows
+            });
         } catch (error) {
-            console.log('ERROR:', error)
+            res.status(500).json({ message: error.message });
         }
     }
 

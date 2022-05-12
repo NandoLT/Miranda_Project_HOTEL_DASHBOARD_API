@@ -6,6 +6,7 @@ const connection = mysql.createConnection({
     password: process.env.DB_PASS_MIRANDA,
     database: process.env.DB_DATABASE_MIRANDA,
     port: process.env.DB_PORT_MIRANDA,
+    flags: "-FOUND_ROWS",
 });
 
 

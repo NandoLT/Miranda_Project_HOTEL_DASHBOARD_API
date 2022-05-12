@@ -19,7 +19,6 @@ module.exports = {
     },
 
     Sign: (userid:number, expiration:string, callback:any) => {
-        console.log('JWT SIGN')
-        return jwt.sign({_id: userid}, process.env.JWT_SECRET, { expiresIn: expiration }, callback);
+        return jwt.sign({id: userid}, process.env.JWT_SECRET, { expiresIn: expiration }, callback);
     }
 }

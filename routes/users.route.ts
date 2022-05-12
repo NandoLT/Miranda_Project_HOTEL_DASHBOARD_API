@@ -18,7 +18,7 @@ router.post('/login', loginUser);
 /**
  * GET Resgister New User
  */
-router.get('/register', Verify, registerUser);
+router.post('/register', Verify, registerUser);
 /**
  * PUT Update info to specific user
  */
