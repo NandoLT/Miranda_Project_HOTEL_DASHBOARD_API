@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 import {Response, Request, NextFunction} from 'express';
 
 module.exports = {
-    Verify: (req:Request, res:Response, next:NextFunction) => {
+    VerifyToken: (req:Request, res:Response, next:NextFunction) => {
         const jwtToken = req.get('Authorization') || req.query.token || req.body.token
 
         if (!jwtToken) {

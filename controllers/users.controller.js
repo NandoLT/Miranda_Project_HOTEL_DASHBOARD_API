@@ -5,9 +5,9 @@ const dbQuery = require('../libs/dbQuery');
 
 class UserController  {
 
+    // TODO:: implement getusers and getuser
     registerUser =  async (req, res, next) => {
         try {
-            console.log('REGISTER');
             let {photo, name_surname, email, start_date, description, contact, status, password} = req.body;
             password = await bcrypt.hash(password, 7);
 
@@ -37,7 +37,6 @@ class UserController  {
         try {
 
             const user = await dbQuery(`SELECT email, password, employeeid FROM users WHERE email = "${email}"`);
-            console.log(user)
             if(user?.length != 0 && (await comparePassword(password, user[0].password))) {
 
                 Sign(user[0].employeeid, '2h', (err, jwtToken) => {
@@ -89,6 +88,31 @@ class UserController  {
             res.status(200).json({ 
                 result: 'affectedRows ' + result.affectedRows
             });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    getUsers = async (req, res, next) => {
+        console.log('GET USERS')
+        try {
+            const result = await dbQuery('SELECT photo, name_surname, email, start_date, description, contact, status FROM  users');
+            res.status(200).json({ 
+                result: result
+            })
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    
+    getUser = async (req, res, next) => {
+        const { id } = req.params;
+        
+        try {
+            const result = await dbQuery(`SELECT photo, name_surname, email, start_date, description, contact, status FROM  users WHERE employeeid=${id}`);
+            res.status(200).json({ 
+                result: result
+            })
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

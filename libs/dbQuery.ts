@@ -1,5 +1,3 @@
-import { Recoverable } from "repl";
-
 const dbConnection = require('./DBConnections/mySQL_MDashboard');
 
 const dbQuery = (query:string) : Promise<any[]> => {

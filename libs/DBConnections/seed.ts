@@ -158,11 +158,12 @@ const addUsers = async () => {
         const description = faker.lorem.sentence();
         const contact = faker.phone.phoneNumber();
         const status = getStatusEmployee(getRandomInt(2));
+        const role = 'EMPLOYEE';
     
         await dbConnect.query(
             `INSERT INTO
-                users (photo, name_surname, email, start_date, description, contact, status)
-                VALUES ("${photo}", "${name_surname}", "${email}", "${start_date}", "${description}", "${contact}", "${status}")`
+                users (photo, name_surname, email, start_date, description, contact, status, role)
+                VALUES ("${photo}", "${name_surname}", "${email}", "${start_date}", "${description}", "${contact}", "${status}", "${role}")`
         );
     }
 }

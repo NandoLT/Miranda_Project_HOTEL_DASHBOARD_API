@@ -1,6 +1,6 @@
 const express = require('express');
 let router = express.Router();
-const { Verify } = require('../libs/jwtAuth');
+const { VerifyToken } = require('../libs/jwtAuth');
 
 const {
     newBooking,
@@ -16,8 +16,8 @@ const {
  *  GET  fetch all bookings
  */
 router.route('/')
-    .post(Verify, newBooking)
-    .get(Verify, getAllBookings)
+    .post(VerifyToken, newBooking)
+    .get(VerifyToken, getAllBookings)
 
 /**
  *  GET fetch a specific booking
@@ -25,9 +25,9 @@ router.route('/')
  *  DELETE delete a specific booking
  */
 router.route('/:bookingid')
-    .get( Verify, getBooking)
-    .put( Verify, updateBooking)
-    .delete( Verify, deleteBooking)
+    .get( VerifyToken, getBooking)
+    .put( VerifyToken, updateBooking)
+    .delete( VerifyToken, deleteBooking)
 
 
 module.exports = router;
