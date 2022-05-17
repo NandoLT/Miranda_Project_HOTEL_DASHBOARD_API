@@ -21,7 +21,7 @@ class RoomsController  {
                 res.status(204).json({result: check.error});
                 
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error);
         }
     }
     
@@ -30,7 +30,7 @@ class RoomsController  {
             const result = await dbQuery('SELECT * FROM rooms');
             res.status(200).json({result: result});
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error)
         }
     }
     
@@ -41,7 +41,7 @@ class RoomsController  {
             const result = await dbQuery(`SELECT * FROM rooms WHERE roomid=${roomid}`);
             res.status(200).json({ result: result})
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error)
         }
     }
     
@@ -55,7 +55,7 @@ class RoomsController  {
                 result: result.message
             });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error)
         }
     }
     
@@ -63,12 +63,14 @@ class RoomsController  {
         const { roomid } = req.params
         try {
             const result = await dbQuery(`DELETE FROM rooms WHERE roomid = ${roomid}`);
-            
-            res.status(200).json({ 
-                result: 'affectedRows ' + result.affectedRows
-            });
+
+            const check = checkDbOperation(result);
+            check.checking ? 
+                res.status(200).json({result: `Affected Rows ${result.affectedRows}`}) : 
+                next(check.error);
+    
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error);
         }
     }
 

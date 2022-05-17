@@ -29,7 +29,7 @@ class UserController  {
             });
             
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error);
         }
     }
 
@@ -56,7 +56,7 @@ class UserController  {
             }
             
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error);
         }
     }
 
@@ -73,7 +73,7 @@ class UserController  {
                 result: result.message
             });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error);
         }
     }
     
@@ -86,7 +86,7 @@ class UserController  {
                 result: 'affectedRows ' + result.affectedRows
             });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error);
         }
     }
 
@@ -97,7 +97,7 @@ class UserController  {
                 result: result
             })
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error);
         }
     }
     
@@ -110,7 +110,7 @@ class UserController  {
                 result: result
             })
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            next(error);
         }
     }
 

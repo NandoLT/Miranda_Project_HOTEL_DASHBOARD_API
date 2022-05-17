@@ -16,7 +16,7 @@ const  checkDbOperation = (result) => {
 
     if(result.affectedRows != 1) {
         error = new Error('Query Insert Error');
-        return {error:error, checking: false};
+        return {error, checking: false};
     } 
     return{checking};
 }
