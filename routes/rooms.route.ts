@@ -1,6 +1,7 @@
+export{};
 const express = require('express');
 let router = express.Router();
-const { Verify } = require('../libs/jwtAuth');
+const { VerifyToken } = require('../libs/jwtAuth');
 
 const {
     newRoom,
@@ -17,17 +18,17 @@ const {
  *  GET fetch all rooms 
  */
 router.route('/')
-    .post(Verify, newRoom)
-    .get(Verify, getRooms)
+    .post(VerifyToken, newRoom)
+    .get(VerifyToken, getRooms)
 
 /**
  *  GET fetch a specific room
  *  PUT update a specific room
  *  DELETE delete a specific room
  */
-router.route('/roomid')
-    .get(Verify, getRoom)
-    .put(Verify, updateRoom)
-    .delete(Verify, deleteRoom)
+router.route('/:roomid')
+    .get(VerifyToken, getRoom)
+    .put(VerifyToken, updateRoom)
+    .delete(VerifyToken, deleteRoom)
 
 module.exports = router;

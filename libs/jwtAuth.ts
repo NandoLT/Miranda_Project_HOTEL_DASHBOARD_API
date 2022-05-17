@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 import {Response, Request, NextFunction} from 'express';
 
 module.exports = {
-    Verify: (req:Request, res:Response, next:NextFunction) => {
+    VerifyToken: (req:Request, res:Response, next:NextFunction) => {
         const jwtToken = req.get('Authorization') || req.query.token || req.body.token
 
         if (!jwtToken) {
@@ -13,12 +13,13 @@ module.exports = {
             if(err) {
                 res.status(401).json({ result: "Unauthorizaed operation. Not valid Token or not provided" });
             }
-            /// TODO: : take userid from payload and insert in request to pass info to the next middleware to implement user verification
+            // TODO: : take userid from payload and insert in request to pass info to the next middleware to implement user verification
+            // TODO: int his case we can use role verification to do some operations ( register, delete, update, )
             next();
         })
     },
 
     Sign: (userid:number, expiration:string, callback:any) => {
-        return jwt.sign({_id: userid}, process.env.JWT_SECRET, { expiresIn: expiration }, callback);
+        return jwt.sign({id: userid}, process.env.JWT_SECRET, { expiresIn: expiration }, callback);
     }
 }
