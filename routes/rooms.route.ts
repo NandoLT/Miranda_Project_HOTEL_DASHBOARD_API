@@ -1,3 +1,4 @@
+export{};
 const express = require('express');
 let router = express.Router();
 const { VerifyToken } = require('../libs/jwtAuth');
@@ -25,7 +26,7 @@ router.route('/')
  *  PUT update a specific room
  *  DELETE delete a specific room
  */
-router.route('/roomid')
+router.route('/:roomid')
     .get(VerifyToken, getRoom)
     .put(VerifyToken, updateRoom)
     .delete(VerifyToken, deleteRoom)

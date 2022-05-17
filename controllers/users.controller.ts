@@ -1,12 +1,13 @@
+export {};
+import {Response, Request, NextFunction} from 'express';
 const bcrypt = require('bcrypt');
 const { Sign } = require('../libs/jwtAuth');
 const comparePassword = require('../libs/comparePassword');
-const dbQuery = require('../libs/dbQuery');
+const { dbQuery, createUpdateQuery } = require('../libs/dbQuery');
 
 class UserController  {
 
-    // TODO:: implement getusers and getuser
-    registerUser =  async (req, res, next) => {
+    registerUser =  async (req:Request, res:Response, next:NextFunction) => {
         try {
             let {photo, name_surname, email, start_date, description, contact, status, password} = req.body;
             password = await bcrypt.hash(password, 7);
@@ -32,7 +33,7 @@ class UserController  {
         }
     }
 
-    loginUser =  async (req, res, next) => {
+    loginUser =  async (req:Request, res:Response, next:NextFunction) => {
         const { email, password } = req.body;
         try {
 
@@ -59,14 +60,10 @@ class UserController  {
         }
     }
 
-    updateUser =  async (req, res, next) => {
-        let columnsValues = ''
-        
-        for (const item in req.body) {
-            if(item != 'userid') {
-                columnsValues += `${item}="${req.body[item]}",`;
-            } 
-        };
+    updateUser =  async (req:Request, res:Response, next:NextFunction) => {
+    
+        const columnsValues = createUpdateQuery(req.body, 'userid');
+
         let {userid} = req.body;
         
         try {
@@ -80,7 +77,7 @@ class UserController  {
         }
     }
     
-    deleteUser =  async (req, res, next) => {
+    deleteUser =  async (req:Request, res:Response, next:NextFunction) => {
         const {userid} = req.body
         try {
             const result = await dbQuery(`DELETE FROM users WHERE employeeid = ${userid}`);
@@ -93,8 +90,7 @@ class UserController  {
         }
     }
 
-    getUsers = async (req, res, next) => {
-        console.log('GET USERS')
+    getUsers = async (req:Request, res:Response, next:NextFunction) => {
         try {
             const result = await dbQuery('SELECT photo, name_surname, email, start_date, description, contact, status FROM  users');
             res.status(200).json({ 
@@ -105,7 +101,7 @@ class UserController  {
         }
     }
     
-    getUser = async (req, res, next) => {
+    getUser = async (req:Request, res:Response, next:NextFunction) => {
         const { id } = req.params;
         
         try {

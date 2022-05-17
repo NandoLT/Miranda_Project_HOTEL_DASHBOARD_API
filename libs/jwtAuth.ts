@@ -13,7 +13,8 @@ module.exports = {
             if(err) {
                 res.status(401).json({ result: "Unauthorizaed operation. Not valid Token or not provided" });
             }
-            /// TODO: : take userid from payload and insert in request to pass info to the next middleware to implement user verification
+            // TODO: : take userid from payload and insert in request to pass info to the next middleware to implement user verification
+            // TODO: int his case we can use role verification to do some operations ( register, delete, update, )
             next();
         })
     },

@@ -1,3 +1,4 @@
+export{}
 const express = require('express');
 let router = express.Router();
 const { VerifyToken } = require('../libs/jwtAuth');
@@ -25,11 +26,11 @@ router.post('/register', VerifyToken, verifyRole, registerUser);
 /**
  * PUT Update info to specific user
  */
-router.put('/update', VerifyToken, updateUser);
+router.put('/update', VerifyToken, verifyRole, updateUser);
 /**
  * DELETE specific user from DB
  */
-router.delete('/delete', VerifyToken, deleteUser);
+router.delete('/delete', VerifyToken, verifyRole, deleteUser);
 /**
  * GET fetch all users
  */
