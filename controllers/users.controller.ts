@@ -3,30 +3,19 @@ import {Response, Request, NextFunction} from 'express';
 const bcrypt = require('bcrypt');
 const { Sign } = require('../libs/jwtAuth');
 const comparePassword = require('../libs/comparePassword');
-const { dbQuery, createUpdateQuery } = require('../libs/dbQuery');
+const Users = require('../models/users.model');
 
 class UserController  {
 
     registerUser =  async (req:Request, res:Response, next:NextFunction) => {
         try {
-            let {photo, name_surname, email, start_date, description, contact, status, password} = req.body;
-            password = await bcrypt.hash(password, 7);
+            let userData = req.body;
+            userData.password = await bcrypt.hash(userData.password, 7);
 
-            const response = await dbQuery(
-                `INSERT INTO
-                users (photo, name_surname, email, start_date, description, contact, status, password)
-                VALUES ("${photo}", "${name_surname}", "${email}", "${start_date}", "${description}", "${contact}", "${status}", "${password}")`
-            );
+            const newUser = new Users(userData);
+            const result = await newUser.save();
 
-            if(response.affectedRows != 1) {
-                const error = new Error('Query Insert Error');
-                res.status(401).json({ message: error.message });
-                return;
-            } 
-
-            res.status(201).json({
-                result: `Rows created ${response.affectedRows}, with id ${response.insertId}`
-            });
+            res.status(201).json({ result });
             
         } catch (error) {
             next(error);
@@ -35,14 +24,16 @@ class UserController  {
 
     loginUser =  async (req:Request, res:Response, next:NextFunction) => {
         const { email, password } = req.body;
+
         try {
 
-            const user = await dbQuery(`SELECT email, password, employeeid FROM users WHERE email = "${email}"`);
-            if(user?.length != 0 && (await comparePassword(password, user[0].password))) {
+            const user = await Users.findOne({ email });
 
-                Sign(user[0].employeeid, '2h', (err, jwtToken) => {
-                    if (err) {
-                        res.status(500).json({ message: err.message });
+            if(!!user && (await comparePassword(password, user.password))) {
+
+                Sign(user._id, '2h', (error, jwtToken) => {
+                    if (error) {
+                        next(error.message)
                     }
                     res.status(200).json({
                         msg: 'Token Created',
@@ -51,8 +42,7 @@ class UserController  {
                 });
             } else {
                 const error = new Error('Invalid Credentials');
-                res.status(401).json({ message: error.message });
-                return;
+                next(error);
             }
             
         } catch (error) {
@@ -61,30 +51,38 @@ class UserController  {
     }
 
     updateUser =  async (req:Request, res:Response, next:NextFunction) => {
-    
-        const columnsValues = createUpdateQuery(req.body, 'userid');
+        const dataUpdate = req.body;
+        const { authUserId } = req.params;
+        const filter = {_id: dataUpdate.userId}
 
-        let {userid} = req.body;
-        
         try {
-            const query = `UPDATE users SET ${columnsValues} employeeid=${userid} WHERE employeeid=${userid}`;
-            const result = await dbQuery(query);
-            res.status(200).json({
-                result: result.message
-            });
+            if(dataUpdate.userId === authUserId) {
+                const updateUser = await Users.findOneAndUpdate(filter, dataUpdate, {
+                    new: true
+                });
+    
+                res.status(200).json({ result: updateUser });
+            } else {
+                const error = new Error('User without permission to perform operation ');
+                next(error);
+            }
         } catch (error) {
             next(error);
         }
     }
     
     deleteUser =  async (req:Request, res:Response, next:NextFunction) => {
-        const {userid} = req.body
+        const {userId: userToDelete } = req.body;
+        const { authUserId } = req.params;
+
         try {
-            const result = await dbQuery(`DELETE FROM users WHERE employeeid = ${userid}`);
-            
-            res.status(200).json({ 
-                result: 'affectedRows ' + result.affectedRows
-            });
+            if(userToDelete === authUserId) {
+                await Users.deleteOne({_id: userToDelete} );
+                res.status(200).json({ result: `User ${userToDelete} deleted successfully` });
+            } else {
+                const error = new Error('User without permission to perform operation ');
+                next(error);
+            }
         } catch (error) {
             next(error);
         }
@@ -92,10 +90,10 @@ class UserController  {
 
     getUsers = async (req:Request, res:Response, next:NextFunction) => {
         try {
-            const result = await dbQuery('SELECT photo, name_surname, email, start_date, description, contact, status FROM  users');
-            res.status(200).json({ 
-                result: result
-            })
+            
+            const result = await Users.find();
+            res.status(200).json({ result });
+
         } catch (error) {
             next(error);
         }
@@ -105,10 +103,9 @@ class UserController  {
         const { id } = req.params;
         
         try {
-            const result = await dbQuery(`SELECT photo, name_surname, email, start_date, description, contact, status FROM  users WHERE employeeid=${id}`);
-            res.status(200).json({ 
-                result: result
-            })
+            const result = await Users.findOne({ _id: id });
+            res.status(200).json({ result });
+
         } catch (error) {
             next(error);
         }

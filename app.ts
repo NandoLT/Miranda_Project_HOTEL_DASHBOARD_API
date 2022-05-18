@@ -11,6 +11,11 @@ var usersRouter = require('./routes/users.route');
 var roomsRouter = require('./routes/rooms.route');
 var bookingsRouter = require('./routes/bookings.route');
 
+
+const mongoConnect = require('./libs/DBConnections/mongodB__MDashboard');
+mongoConnect.connect;
+
+
 const app:Express = express(); 
 
 app.use(cors());

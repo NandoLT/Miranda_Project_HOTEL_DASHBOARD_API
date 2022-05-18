@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-// var app = require('../dist/app');
+// var app = require('../app.ts');
+var app = require('../dist/app');
 var debug = require('debug')('api-rest:server');
 var http = require('http');
 

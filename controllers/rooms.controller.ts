@@ -1,24 +1,17 @@
 export{};
 import { Response, Request, NextFunction } from 'express';
-const { dbQuery, checkDbOperation, createUpdateQuery } = require('../libs/dbQuery');
-
+const Rooms = require('../models/rooms.model');
 
 class RoomsController  {
 
     newRoom =  async (req:Request, res:Response, next:NextFunction) => {
-        const { photo, room_number, bed_type, facilities, rate, offer_price, status } = req.body;
+        const  roomData = req.body;
         
         try {
-            const result = await dbQuery(
-                `INSERT INTO
-                rooms (photo, room_number, bed_type, facilities, rate, offer_price, status)
-                VALUES ("${photo}", ${room_number}, "${bed_type}", "${facilities}", ${rate}, ${offer_price}, "${status}")
-                ` 
-                );
-            const check = checkDbOperation(result);
-            check.checking ? 
-                res.status(200).json({result: `Rows inserteds ${result.affectedRows}`}) : 
-                res.status(204).json({result: check.error});
+            const newRoom = new Rooms(roomData);
+            const result = await newRoom.save();
+
+            res.status(201).json({ result });
                 
         } catch (error) {
             next(error);
@@ -27,8 +20,8 @@ class RoomsController  {
     
     getRooms =  async (req:Request, res:Response, next:NextFunction) => {
         try {
-            const result = await dbQuery('SELECT * FROM rooms');
-            res.status(200).json({result: result});
+            const result = await Rooms.find();
+            res.status(200).json({ result });
         } catch (error) {
             next(error)
         }
@@ -38,8 +31,8 @@ class RoomsController  {
         const { roomid } = req.params;
         
         try {
-            const result = await dbQuery(`SELECT * FROM rooms WHERE roomid=${roomid}`);
-            res.status(200).json({ result: result})
+            const result = await Rooms.findOne({_id: roomid });
+            res.status(200).json({ result });
         } catch (error) {
             next(error)
         }
@@ -47,13 +40,14 @@ class RoomsController  {
     
     updateRoom =  async (req:Request, res:Response, next:NextFunction) => {
         const { roomid } = req.params;
+        const dataToUpdate = req.body;
+        const filter = {_id: roomid };
+
         try {
-            const columnsValues = createUpdateQuery(req.body, 'roomid');
-            const query = `UPDATE rooms SET ${columnsValues} roomid=${roomid} WHERE roomid=${roomid}`;
-            const result = await dbQuery(query);
-            res.status(200).json({
-                result: result.message
+            const updateRoom = await Rooms.findOneAndUpdate(filter, dataToUpdate, {
+                new: true
             });
+            res.status(201).json({ result: updateRoom });    
         } catch (error) {
             next(error)
         }
@@ -62,13 +56,8 @@ class RoomsController  {
     deleteRoom =  async (req:Request, res:Response, next:NextFunction) => {
         const { roomid } = req.params
         try {
-            const result = await dbQuery(`DELETE FROM rooms WHERE roomid = ${roomid}`);
-
-            const check = checkDbOperation(result);
-            check.checking ? 
-                res.status(200).json({result: `Affected Rows ${result.affectedRows}`}) : 
-                next(check.error);
-    
+            await Rooms.deleteOne({_id: roomid });
+            res.status(200).json({ result: `Room ${roomid} deleted successfully` });
         } catch (error) {
             next(error);
         }

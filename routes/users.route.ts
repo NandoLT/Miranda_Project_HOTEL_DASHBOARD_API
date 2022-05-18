@@ -22,15 +22,15 @@ router.post('/login', loginUser);
 /**
  * GET Resgister New User
  */
-router.post('/register', VerifyToken, verifyRole, registerUser);
+router.post('/register', VerifyToken, registerUser);
 /**
  * PUT Update info to specific user
  */
-router.put('/update', VerifyToken, verifyRole, updateUser);
+router.put('/update', VerifyToken, updateUser);
 /**
  * DELETE specific user from DB
  */
-router.delete('/delete', VerifyToken, verifyRole, deleteUser);
+router.delete('/delete', VerifyToken, deleteUser);
 /**
  * GET fetch all users
  */
