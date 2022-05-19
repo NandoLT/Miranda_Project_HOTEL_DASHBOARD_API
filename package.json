@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon -L ./app.ts",
-    "initDB": "node --loader ts-node/esm ./libs/DBConnections/seed.cjs"
+    "initDB": "node --loader ts-node/esm ./libs/DBConnections/seed.ts"
   },
   "dependencies": {
     "@types/mongoose": "^5.11.97",
