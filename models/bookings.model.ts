@@ -10,7 +10,7 @@ const bookingsSchema = new Schema ({
     room_type:      { type:String, required:true },
     status:         { type:String, enum:['CHECK IN','CHECK OUT','IN PROGRESS'], default: 'IN PROGRESS', required:true},
     room_id:        { type:Number, indexed:true, required:true}
-});
+},{ versionKey: false });
 
 
 const Bookings = mongoose.model('Bookings', bookingsSchema);

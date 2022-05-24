@@ -10,7 +10,7 @@ const roomsSchema = new Schema ({
     rate:        { type:Number, required:true },
     offer_price: { type:Number, default:0 },
     status:      { type:String, enum:['AVAILABLE','BOOKED'], default: 'AVAILABLE', required:true }
-});
+},{ versionKey: false });
 
 
 const Rooms = mongoose.model('Rooms', roomsSchema);

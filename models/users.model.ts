@@ -12,7 +12,7 @@ const usersSchema = new Schema({
     status:         { type: String, enum:['ACTIVE', 'INACTIVE'], default: 'ACTIVE', required: true }, 
     password:       { type: String, required:true },
     role:           { type: String, enum:['ADMIN', 'EMPLOYEE'], default:'EMPLOYEE', required: true },
-});
+},{ versionKey: false });
 
 const Users = mongoose.model('Users', usersSchema);
 

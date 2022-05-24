@@ -20,7 +20,7 @@ module.exports = {
         })
     },
 
-    Sign: (userId:number, expiration:string, callback:any) => {
-        return jwt.sign({id: userId}, process.env.JWT_SECRET, { expiresIn: expiration }, callback);
+    Sign: (user:any, expiration:string, callback:any) => {
+        return jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: expiration }, callback);
     }
 }

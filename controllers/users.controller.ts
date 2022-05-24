@@ -27,11 +27,22 @@ class UserController  {
 
         try {
 
-            const user = await Users.findOne({ email });
+            const user = await Users.findOne({ email: email });
 
             if(!!user && (await comparePassword(password, user.password))) {
-
-                Sign(user._id, '2h', (error, jwtToken) => {
+                const userNoPassword = {
+                    id: user.id,
+                    photo: user.photo,
+                    name_surname: user.name_surname,
+                    email: user.email,
+                    start_date: user.start_date,
+                    description: user.description,
+                    contact: user.contact,
+                    status: user.status,
+                    role: user.role
+                }
+                // Sign(user._id, '2h', (error, jwtToken) => {
+                Sign(userNoPassword, '2h', (error, jwtToken) => {
                     if (error) {
                         next(error.message)
                     }
