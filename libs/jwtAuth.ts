@@ -4,7 +4,6 @@ import {Response, Request, NextFunction} from 'express';
 module.exports = {
     VerifyToken: (req:Request, res:Response, next:NextFunction) => {
         const jwtToken = req.get('Authorization') || req.query.token || req.body.token
-
         if (!jwtToken) {
             res.status(401).json({ result: "Unauthorizaed operation. Not valid Token or not provided" });
         }

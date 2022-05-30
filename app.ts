@@ -10,6 +10,7 @@ const cors = require('cors');
 var usersRouter = require('./routes/users.route');
 var roomsRouter = require('./routes/rooms.route');
 var bookingsRouter = require('./routes/bookings.route');
+var contactsRouter = require('./routes/contacts.route');
 
 
 const mongoConnect = require('./libs/DBConnections/mongodB__MDashboard');
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use('/api/users', usersRouter);
 app.use('/api/rooms', roomsRouter);
 app.use('/api/bookings', bookingsRouter);
+app.use('/api/contacts', contactsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
