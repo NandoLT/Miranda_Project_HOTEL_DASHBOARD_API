@@ -41,7 +41,6 @@ class UserController  {
                     status: user.status,
                     role: user.role
                 }
-                // Sign(user._id, '2h', (error, jwtToken) => {
                 Sign(userNoPassword, '2h', (error, jwtToken) => {
                     if (error) {
                         next(error.message)
@@ -102,7 +101,7 @@ class UserController  {
     getUsers = async (req:Request, res:Response, next:NextFunction) => {
         try {
             
-            const result = await Users.find();
+            const result = await Users.find({},{password: 0});
             res.status(200).json({ result });
 
         } catch (error) {
@@ -114,7 +113,7 @@ class UserController  {
         const { id } = req.params;
         
         try {
-            const result = await Users.findOne({ _id: id });
+            const result = await Users.findOne({ _id: id }, {password: 0});
             res.status(200).json({ result });
 
         } catch (error) {
