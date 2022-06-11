@@ -8,7 +8,8 @@ const {
     getAllBookings,
     getBooking,
     updateBooking,
-    deleteBooking
+    deleteBooking,
+    getBookingByReference
 } = require('../controllers/bookings.controller');
 
 //ALL ROUTES ARE SECURE ROUTES
@@ -29,6 +30,13 @@ router.route('/:bookingid')
     .get( VerifyToken, getBooking)
     .put( VerifyToken, updateBooking)
     .delete( VerifyToken, deleteBooking)
+
+    /**
+ *  GET fetch a specific booking
+ * route to use in react-native app
+ */
+router.route('/internal/:reference')
+    .get(getBookingByReference)
 
 
 module.exports = router;

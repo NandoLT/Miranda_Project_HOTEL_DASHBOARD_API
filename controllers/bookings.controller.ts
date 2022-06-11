@@ -38,6 +38,17 @@ class BookingsController  {
         }
     }
 
+    getBookingByReference = async (req:Request, res:Response, next:NextFunction) => {
+        const {reference} = req.params;
+        console.log('REFERENCE', reference);
+        try {
+            const result =await  Bookings.findOne({ reference:reference });
+            res.status(200).json({ result });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     updateBooking =  async (req:Request, res:Response, next:NextFunction) => {
         const { bookingid } = req.params;
         const dataToupdate = req.body;
