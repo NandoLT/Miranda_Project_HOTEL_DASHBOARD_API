@@ -18,7 +18,7 @@ mongoConnect.connect;
 
 const app = express(); 
 
-app.set('port', process.env.PORT || 3000);
+// app.set('port', process.env.PORT || 3000);
 
 app.use(cors());
 app.use(logger('dev'));
@@ -42,7 +42,7 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(app.get('port'), () =>{
-  console.log('Server on port ', app.get('port'))
+  console.log('Server on port ', process.env.PORT)
 }) 
 
 module.exports = app;
