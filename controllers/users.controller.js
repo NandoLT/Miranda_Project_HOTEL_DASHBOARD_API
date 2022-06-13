@@ -1,5 +1,3 @@
-export {};
-import {Response, Request, NextFunction} from 'express';
 const bcrypt = require('bcrypt');
 const { Sign } = require('../libs/jwtAuth');
 const comparePassword = require('../libs/comparePassword');
@@ -7,7 +5,7 @@ const Users = require('../models/users.model');
 
 class UserController  {
 
-    registerUser =  async (req:Request, res:Response, next:NextFunction) => {
+    registerUser =  async (req, res, next) => {
         try {
             let userData = req.body;
             userData.password = await bcrypt.hash(userData.password, 7);
@@ -22,7 +20,7 @@ class UserController  {
         }
     }
 
-    loginUser =  async (req:Request, res:Response, next:NextFunction) => {
+    loginUser =  async (req, res, next) => {
         const { email, password } = req.body;
 
         try {
@@ -60,7 +58,7 @@ class UserController  {
         }
     }
 
-    updateUser =  async (req:Request, res:Response, next:NextFunction) => {
+    updateUser =  async (req, res, next) => {
         const dataUpdate = req.body;
         const { authUserId } = req.params;
         const filter = {_id: dataUpdate.userId}
@@ -81,7 +79,7 @@ class UserController  {
         }
     }
     
-    deleteUser =  async (req:Request, res:Response, next:NextFunction) => {
+    deleteUser =  async (req, res, next) => {
         const {userId: userToDelete } = req.body;
         const { authUserId } = req.params;
 
@@ -98,7 +96,7 @@ class UserController  {
         }
     }
 
-    getUsers = async (req:Request, res:Response, next:NextFunction) => {
+    getUsers = async (req, res, next) => {
         try {
             
             const result = await Users.find({},{password: 0});
@@ -109,7 +107,7 @@ class UserController  {
         }
     }
     
-    getUser = async (req:Request, res:Response, next:NextFunction) => {
+    getUser = async (req, res, next) => {
         const { id } = req.params;
         
         try {

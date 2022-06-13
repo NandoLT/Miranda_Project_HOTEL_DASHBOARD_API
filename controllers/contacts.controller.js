@@ -1,10 +1,8 @@
-export{};
-import { Response, Request, NextFunction } from 'express';
 const Contacts = require('../models/contacts.model');
 
 class ContactsController  {
 
-    newMessage =  async (req:Request, res:Response, next:NextFunction) => {
+    newMessage =  async (req, res, next) => {
         const  messageData = req.body;
         
         try {
@@ -18,7 +16,7 @@ class ContactsController  {
         }
     }
     
-    getMessages =  async (req:Request, res:Response, next:NextFunction) => {
+    getMessages =  async (req, res, next) => {
         try {
             const result = await Contacts.find();
             res.json({ result });
@@ -27,7 +25,7 @@ class ContactsController  {
         }
     }
     
-    getMessage =  async (req:Request, res:Response, next:NextFunction) => {
+    getMessage =  async (req, res, next) => {
         const { messageid } = req.params;
         
         try {
@@ -38,7 +36,7 @@ class ContactsController  {
         }
     }
     
-    updateMessageStatus =  async (req:Request, res:Response, next:NextFunction) => {
+    updateMessageStatus =  async (req, res, next) => {
         const { messageid } = req.params;
         const { status } = req.body;
         console.log('sTATUS update', status)
@@ -54,7 +52,7 @@ class ContactsController  {
         }
     }
     
-    deleteMessage =  async (req:Request, res:Response, next:NextFunction) => {
+    deleteMessage =  async (req, res, next) => {
         const { messageid } = req.params
         try {
             await Contacts.deleteOne({_id: messageid });

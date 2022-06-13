@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon -L ./app.ts",
-    "initDB": "node --loader ts-node/esm ./libs/DBConnections/seed.ts"
+    "dev": "nodemon ./app.js",
+    "initDB": "node ./libs/DBConnections/seed.js"
   },
   "dependencies": {
-    "@types/mongoose": "^5.11.97",
     "bcrypt": "^5.0.1",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
@@ -22,10 +21,6 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^6.3.1",
-    "@types/express": "^4.17.13",
-    "@types/node": "^17.0.31",
-    "nodemon": "^2.0.16",
-    "ts-node": "^10.7.0",
-    "typescript": "^4.6.4"
+    "nodemon": "^2.0.16"
   }
 }

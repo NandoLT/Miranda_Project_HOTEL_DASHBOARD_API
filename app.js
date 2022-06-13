@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-import {Express, ErrorRequestHandler} from 'express';
 var createError = require('http-errors');
 var express = require('express');
 var cookieParser = require('cookie-parser');
@@ -17,13 +16,14 @@ const mongoConnect = require('./libs/DBConnections/mongodB__MDashboard');
 mongoConnect.connect;
 
 
-const app:Express = express(); 
+const app = express(); 
+
+app.set('port', process.env.PORT || 3000);
 
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.set('port', process.env.PORT || 3000)
 app.use(cookieParser());
 
 app.use('/api/users', usersRouter);
@@ -37,11 +37,9 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+app.use(function(err, req, res, next) {
   res.status(err.status || 500).json({error: err.message});
-};
-
-app.use(errorHandler);
+});
 
 app.listen(app.get('port'), () =>{
   console.log('Server on port ', app.get('port'))

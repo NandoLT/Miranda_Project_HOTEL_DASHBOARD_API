@@ -1,11 +1,9 @@
-export{}
-
 require('dotenv').config({
     path: __dirname + '/../../.env'
 });
 
 const mongoose = require('mongoose');
-const Users = require('../../models/users.model.ts');
+const Users = require('../../models/users.model');
 const Rooms = require('../../models/rooms.model');
 const Bookings = require('../../models/bookings.model');
 

@@ -1,10 +1,8 @@
-export{};
-import { Response, Request, NextFunction } from 'express';
 const Rooms = require('../models/rooms.model');
 
 class RoomsController  {
 
-    newRoom =  async (req:Request, res:Response, next:NextFunction) => {
+    newRoom =  async (req, res, next) => {
         const  roomData = req.body;
         
         try {
@@ -18,7 +16,7 @@ class RoomsController  {
         }
     }
     
-    getRooms =  async (req:Request, res:Response, next:NextFunction) => {
+    getRooms =  async (req, res, next) => {
         try {
             const result = await Rooms.find();
             res.status(200).json({ result });
@@ -27,7 +25,7 @@ class RoomsController  {
         }
     }
     
-    getRoom =  async (req:Request, res:Response, next:NextFunction) => {
+    getRoom =  async (req, res, next) => {
         const { roomid } = req.params;
         
         try {
@@ -38,7 +36,7 @@ class RoomsController  {
         }
     }
     
-    updateRoom =  async (req:Request, res:Response, next:NextFunction) => {
+    updateRoom =  async (req, res, next) => {
         const { roomid } = req.params;
         const dataToUpdate = req.body;
         const filter = {_id: roomid };
@@ -53,7 +51,7 @@ class RoomsController  {
         }
     }
     
-    deleteRoom =  async (req:Request, res:Response, next:NextFunction) => {
+    deleteRoom =  async (req, res, next) => {
         const { roomid } = req.params
         try {
             await Rooms.deleteOne({_id: roomid });

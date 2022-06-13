@@ -1,10 +1,8 @@
-export{};
-import { Request, Response, NextFunction }  from 'express';
 const Bookings = require('../models/bookings.model');
 
 class BookingsController  {
 
-    newBooking =  async (req:Request, res:Response, next:NextFunction) => {
+    newBooking =  async (req, res, next) => {
         const bookingData = req.body;
 
         try {
@@ -18,7 +16,7 @@ class BookingsController  {
         }
     }
 
-    getAllBookings =  async (req:Request, res:Response, next:NextFunction) => {
+    getAllBookings =  async (req, res, next) => {
         try {
             const result = await Bookings.find();
             res.status(200).json({ result });
@@ -27,7 +25,7 @@ class BookingsController  {
         }
     }
 
-    getBooking =  async (req:Request, res:Response, next:NextFunction) => {
+    getBooking =  async (req, res, next) => {
         const { bookingid } = req.params;
         
         try {
@@ -38,9 +36,9 @@ class BookingsController  {
         }
     }
 
-    getBookingByReference = async (req:Request, res:Response, next:NextFunction) => {
+    getBookingByReference = async (req, res, next) => {
         const {reference} = req.params;
-        console.log('REFERENCE', reference);
+        
         try {
             const result =await  Bookings.findOne({ reference:reference });
             res.status(200).json({ result });
@@ -49,7 +47,7 @@ class BookingsController  {
         }
     }
 
-    updateBooking =  async (req:Request, res:Response, next:NextFunction) => {
+    updateBooking =  async (req, res, next) => {
         const { bookingid } = req.params;
         const dataToupdate = req.body;
         const filter = {_id: bookingid };
@@ -63,7 +61,7 @@ class BookingsController  {
         }
     }
 
-    deleteBooking =  async (req:Request, res:Response, next:NextFunction) => {
+    deleteBooking =  async (req, res, next) => {
         const { bookingid } = req.params
         try {
             await Bookings.deleteOne({ _id: bookingid });
