@@ -1,0 +1,28 @@
+[
+    {
+        "photo": "http:wwww.image.es",
+        "room_number": 34,
+        "bed_type": "DOUBLE BED",
+        "facilities": ["wifi", "minibar"],
+        "rate": 100,
+        "offer_price": 5,
+        "status": "AVAILABLE"
+    },
+    {
+        "photo": "http:wwww.image.es",
+        "room_number": 155,
+        "bed_type": "SINGLE BED",
+        "facilities": ["wifi"],
+        "rate": 75,
+        "offer_price": 20,
+        "status": "BOOKED"
+    },
+    {
+        "photo": "http:wwww.image.es",
+        "room_number": 90,
+        "bed_type": "SUITE",
+        "facilities": ["wifi", "secure box", "spa"],
+        "rate": 300,
+        "status": "AVAILABLE"
+    }
+]

@@ -1,35 +1,121 @@
-
+const bcrypt = require('bcrypt');
+const { Sign } = require('../libs/jwtAuth');
+const comparePassword = require('../libs/comparePassword');
+const Users = require('../models/users.model');
 
 class UserController  {
+
     registerUser =  async (req, res, next) => {
         try {
-            console.log('REGISTER USER')
+            let userData = req.body;
+            userData.password = await bcrypt.hash(userData.password, 7);
+
+            const newUser = new Users(userData);
+            const result = await newUser.save();
+
+            res.status(201).json({ result });
+            
         } catch (error) {
-            console.log('ERROR:', error)
+            next(error);
         }
     }
 
     loginUser =  async (req, res, next) => {
+        const { email, password } = req.body;
+
         try {
-            console.log('LOGIN USER')
+
+            const user = await Users.findOne({ email: email });
+
+            if(!!user && (await comparePassword(password, user.password))) {
+                const userNoPassword = {
+                    id: user.id,
+                    photo: user.photo,
+                    name_surname: user.name_surname,
+                    email: user.email,
+                    start_date: user.start_date,
+                    description: user.description,
+                    contact: user.contact,
+                    status: user.status,
+                    role: user.role
+                }
+                Sign(userNoPassword, '2h', (error, jwtToken) => {
+                    if (error) {
+                        next(error.message)
+                    }
+                    res.status(200).json({
+                        msg: 'Token Created',
+                        token: jwtToken,       
+                    })
+                });
+            } else {
+                const error = new Error('Invalid Credentials');
+                next(error);
+            }
+            
         } catch (error) {
-            console.log('ERROR:', error)
+            next(error);
         }
     }
 
     updateUser =  async (req, res, next) => {
+        const dataUpdate = req.body;
+        const { authUserId } = req.params;
+        const filter = {_id: dataUpdate.userId}
+
         try {
-            console.log('UPDATE USER')
+            if(dataUpdate.userId === authUserId) {
+                const updateUser = await Users.findOneAndUpdate(filter, dataUpdate, {
+                    new: true
+                });
+    
+                res.status(200).json({ result: updateUser });
+            } else {
+                const error = new Error('User without permission to perform operation ');
+                next(error);
+            }
         } catch (error) {
-            console.log('ERROR:', error)
+            next(error);
+        }
+    }
+    
+    deleteUser =  async (req, res, next) => {
+        const {userId: userToDelete } = req.body;
+        const { authUserId } = req.params;
+
+        try {
+            if(userToDelete === authUserId) {
+                await Users.deleteOne({_id: userToDelete} );
+                res.status(200).json({ result: `User ${userToDelete} deleted successfully` });
+            } else {
+                const error = new Error('User without permission to perform operation ');
+                next(error);
+            }
+        } catch (error) {
+            next(error);
         }
     }
 
-    deleteUser =  async (req, res, next) => {
+    getUsers = async (req, res, next) => {
         try {
-            console.log('DELETE USER')
+            
+            const result = await Users.find({},{password: 0});
+            res.status(200).json({ result });
+
         } catch (error) {
-            console.log('ERROR:', error)
+            next(error);
+        }
+    }
+    
+    getUser = async (req, res, next) => {
+        const { id } = req.params;
+        
+        try {
+            const result = await Users.findOne({ _id: id }, {password: 0});
+            res.status(200).json({ result });
+
+        } catch (error) {
+            next(error);
         }
     }
 

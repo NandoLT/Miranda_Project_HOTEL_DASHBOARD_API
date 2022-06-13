@@ -1,0 +1,29 @@
+[ 
+    {
+        "name_surname": "Víctor López",
+        "email": "victor@miranda.com",
+        "start_date": "2018-03-15",
+        "description": "reception",
+        "contact": 678987234,
+        "status": "ACTIVE",
+        "password": 12345
+    },
+    {
+        "name_surname": "León lopez",
+        "email": "leon@miranda.com",
+        "start_date": "2019-05-18",
+        "description": "bar",
+        "contact": 6664543009,
+        "status": "ACTIVE",
+        "password": 12345
+    },
+    {
+        "name_surname": "Verónica Cabañas",
+        "email": "vero@miranda.com",
+        "start_date": "2015-11-02",
+        "description": "direction",
+        "contact": 628976433,
+        "status": "ACTIVE",
+        "password": 12345
+    }
+]

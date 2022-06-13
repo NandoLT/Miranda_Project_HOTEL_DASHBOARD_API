@@ -3,12 +3,12 @@ let router = express.Router();
 const { VerifyToken } = require('../libs/jwtAuth');
 
 const {
-    newRoom,
-    getRooms,
-    getRoom,
-    updateRoom,
-    deleteRoom,
-} = require('../controllers/rooms.controller');
+    newMessage,
+    getMessages,
+    getMessage,
+    updateMessageStatus,
+    deleteMessage,
+} = require('../controllers/contacts.controller');
 
 
 //ALL ROUTES ARE SECURE ROUTES
@@ -17,17 +17,17 @@ const {
  *  GET fetch all rooms 
  */
 router.route('/')
-    .post(VerifyToken, newRoom)
-    .get(VerifyToken, getRooms)
+    .post(VerifyToken, newMessage)
+    .get(VerifyToken, getMessages)
 
 /**
  *  GET fetch a specific room
  *  PUT update a specific room
  *  DELETE delete a specific room
  */
-router.route('/:roomid')
-    .get(VerifyToken, getRoom)
-    .put(VerifyToken, updateRoom)
-    .delete(VerifyToken, deleteRoom)
+router.route('/:messageid')
+    .get(VerifyToken, getMessage)
+    .put(VerifyToken, updateMessageStatus)
+    .delete(VerifyToken, deleteMessage)
 
 module.exports = router;

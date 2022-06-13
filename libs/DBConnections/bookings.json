@@ -1,0 +1,21 @@
+[
+    {
+        "guest": "Olivia López",
+        "order_date": "2022-02-25",
+        "check_in": "2022-03-10",
+        "check_out": "2022-02-15",
+        "room_type": "SUITE - 90",
+        "status": "CHECK OUT",
+        "room_id": "9876796787"
+    },
+    {
+        "guest": "Carlos Terrero",
+        "order_date": "2022-04-25",
+        "check_in": "2022-05-20",
+        "check_out": "2022-05-22",
+        "room_type": "SUITE - 90",
+        "status": "IN PROGRESS",
+        "room_id": "9876adsass7"
+    }
+    
+]

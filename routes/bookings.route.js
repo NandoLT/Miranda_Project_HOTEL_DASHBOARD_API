@@ -1,13 +1,14 @@
 const express = require('express');
 let router = express.Router();
-const { Verify } = require('../libs/jwtAuth');
+const { VerifyToken } = require('../libs/jwtAuth');
 
 const {
     newBooking,
     getAllBookings,
     getBooking,
     updateBooking,
-    deleteBooking
+    deleteBooking,
+    getBookingByReference
 } = require('../controllers/bookings.controller');
 
 //ALL ROUTES ARE SECURE ROUTES
@@ -16,8 +17,8 @@ const {
  *  GET  fetch all bookings
  */
 router.route('/')
-    .post(Verify, newBooking)
-    .get(Verify, getAllBookings)
+    .post(VerifyToken, newBooking)
+    .get(VerifyToken, getAllBookings)
 
 /**
  *  GET fetch a specific booking
@@ -25,9 +26,16 @@ router.route('/')
  *  DELETE delete a specific booking
  */
 router.route('/:bookingid')
-    .get( Verify, getBooking)
-    .put( Verify, updateBooking)
-    .delete( Verify, deleteBooking)
+    .get( VerifyToken, getBooking)
+    .put( VerifyToken, updateBooking)
+    .delete( VerifyToken, deleteBooking)
+
+    /**
+ *  GET fetch a specific booking
+ * route to use in react-native app
+ */
+router.route('/internal/:reference')
+    .get(getBookingByReference)
 
 
 module.exports = router;

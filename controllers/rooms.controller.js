@@ -1,43 +1,63 @@
-
+const Rooms = require('../models/rooms.model');
 
 class RoomsController  {
+
     newRoom =  async (req, res, next) => {
+        const  roomData = req.body;
+        
         try {
-            console.log('REGISTER NEW ROOM')
+            const newRoom = new Rooms(roomData);
+            const result = await newRoom.save();
+
+            res.status(201).json({ result });
+                
         } catch (error) {
-            console.log('ERROR:', error)
+            next(error);
         }
     }
-
+    
     getRooms =  async (req, res, next) => {
         try {
-            console.log('GET ALL ROOMS')
+            const result = await Rooms.find();
+            res.status(200).json({ result });
         } catch (error) {
-            console.log('ERROR:', error)
+            next(error)
         }
     }
-
+    
     getRoom =  async (req, res, next) => {
+        const { roomid } = req.params;
+        
         try {
-            console.log('GET SPECIFIC ROOM')
+            const result = await Rooms.findOne({_id: roomid });
+            res.status(200).json({ result });
         } catch (error) {
-            console.log('ERROR:', error)
+            next(error)
         }
     }
-
+    
     updateRoom =  async (req, res, next) => {
+        const { roomid } = req.params;
+        const dataToUpdate = req.body;
+        const filter = {_id: roomid };
+
         try {
-            console.log('UPDATE SPECIFIC ROOM')
+            const updateRoom = await Rooms.findOneAndUpdate(filter, dataToUpdate, {
+                new: true
+            });
+            res.status(201).json({ result: updateRoom });    
         } catch (error) {
-            console.log('ERROR:', error)
+            next(error)
         }
     }
-
+    
     deleteRoom =  async (req, res, next) => {
+        const { roomid } = req.params
         try {
-            console.log('DELETE SPECIFIC ROOM')
+            await Rooms.deleteOne({_id: roomid });
+            res.status(200).json({ result: `Room ${roomid} deleted successfully` });
         } catch (error) {
-            console.log('ERROR:', error)
+            next(error);
         }
     }
 
